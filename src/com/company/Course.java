@@ -7,27 +7,35 @@ public class Course {
     protected String name;
     protected int numOfCredit;
     ArrayList<Student> enrollStudentList;
-    public  Course(String id, String name,int numOfCredit){
+
+    public Course(String id, String name, int numOfCredit) {
         this.id = id;
         this.name = name;
         this.numOfCredit = numOfCredit;
         this.enrollStudentList = new ArrayList<Student>();
     }
-    public void enroll(Student student){
+
+    public void enroll(Student student) {
         this.enrollStudentList.add(student);
     }
-    public void printStudent(){
-        for (Student student : enrollStudentList){
+
+    public void printStudent() {
+        for (Student student : enrollStudentList) {
             System.out.println(student.getId());
         }
     }
+
     public String getName() {
         return name;
     }
-    public String getId(){
+
+    public String getId() {
         return id;
     }
-    public int getCredit() { return numOfCredit;}
+
+    public int getCredit() {
+        return numOfCredit;
+    }
 
     @Override
     public String toString() {
@@ -37,4 +45,5 @@ public class Course {
                 ", numOfCredit=" + numOfCredit +
                 '}';
     }
+}
 
