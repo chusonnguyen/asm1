@@ -1,0 +1,4 @@
+2021-04-06 15:34:49.564,Student{id='s3742891', name='Nguyen Chu Son', birthday='28/09/2000'}
+2021-04-06 15:35:22.755,Course{id='cosc123', name='alibaba', numOfCredit=12}
+2021-04-06 15:35:22.755,Course{id='cosc124', name='bolabola', numOfCredit=12}
+2021-04-06 15:35:22.755,Course{id='cosc125', name='no_name', numOfCredit=12}
