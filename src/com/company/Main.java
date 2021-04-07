@@ -59,6 +59,16 @@ public class Main implements StudentEnrolmentManager {
         coursesList = new ArrayList<Course>();
         enrolments = new ArrayList<StudentEnrolment>();
     }
+
+    Course getCourse(String courseID){
+        Course newCourse = null;
+        for ( Course course : coursesList){
+            if ( courseID.equals(course.getId())){
+                return course;
+            }
+        }
+        return newCourse;
+    }
     void Menu(){
         System.out.println("========== ========== ========== ========== ========== ==========");
         System.out.println("1. Enroll student\n2. Update enrollment\n3. Print all course for one student in 1 semester\n" +
@@ -417,9 +427,15 @@ public class Main implements StudentEnrolmentManager {
 
     @Override
     public void getOne(String semester){
+        ArrayList<String> courseIdList = new ArrayList<>();
         for ( StudentEnrolment enrollment : enrolments){
             if ( enrollment.getSemester().equals(semester)){
-
+                if (courseIdList.contains(enrollment.getCourseId())){
+                    continue;
+                } else {
+                    courseIdList.add(enrollment.getCourseId());
+                    System.out.println(getCourse(enrollment.getCourseId()).toString());
+                }
             }
         }
     }
