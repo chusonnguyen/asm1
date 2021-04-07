@@ -6,5 +6,6 @@ public interface StudentEnrolmentManager {
     void delete(StudentEnrolment enrolment) throws InterruptedException;
     void getOne();
     void getOne(String courseID, String semester);
+    void getOne(String semester);
     void getAll();
 }

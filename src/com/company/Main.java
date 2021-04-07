@@ -159,6 +159,29 @@ public class Main implements StudentEnrolmentManager {
                         waitScreen();
                         break;
                     }
+                    case 5: {
+                        String command;
+                        System.out.print("Please enter the semester: ");
+                        boolean found = false;
+                        try {
+                            command = in.nextLine();
+                            for (StudentEnrolment enrollment : enrolments){
+                                if ( enrollment.getSemester().equals(command)){
+                                    found = true;
+                                }
+                            }
+                            if (!found) {
+                                System.out.println("No course offered in semester" + command);
+                            } else {
+                                getOne(command);
+                            }
+                        } catch (NoSuchElementException e){
+                            System.out.println("Invalid input");
+                            Thread.sleep(1000);
+                            break;
+                        }
+                        break;
+                    }
                     case 6:
                         getAll();
                         break;
@@ -389,6 +412,15 @@ public class Main implements StudentEnrolmentManager {
         } catch (IOException E){
             System.out.println("File error.");
             return;
+        }
+    }
+
+    @Override
+    public void getOne(String semester){
+        for ( StudentEnrolment enrollment : enrolments){
+            if ( enrollment.getSemester().equals(semester)){
+
+            }
         }
     }
 
