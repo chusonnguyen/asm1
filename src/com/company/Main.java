@@ -69,6 +69,14 @@ public class Main implements StudentEnrolmentManager {
         }
         return newCourse;
     }
+
+    Student getStudent(String studentId){
+        Student newStudent = null;
+        for ( Student student : studentsList){
+            if ( studentId.equals(student.getId())){ return student;}
+        }
+        return newStudent;
+    }
     void Menu(){
         System.out.println("========== ========== ========== ========== ========== ==========");
         System.out.println("1. Enroll student\n2. Update enrollment\n3. Print all course for one student in 1 semester\n" +
@@ -184,6 +192,7 @@ public class Main implements StudentEnrolmentManager {
                                 System.out.println("No course offered in semester" + command);
                             } else {
                                 getOne(command);
+                                Thread.sleep(1500);
                             }
                         } catch (NoSuchElementException e){
                             System.out.println("Invalid input");
@@ -371,15 +380,11 @@ public class Main implements StudentEnrolmentManager {
             if (checkStudentEnrollment(tokens[0],tokens[1])){
                 for ( StudentEnrolment enrollment : enrolments){
                     if ( enrollment.getStudentId().equals(tokens[0]) && enrollment.getSemester().equals(tokens[1])){
-                        for (Course course : coursesList){
-                            if ( course.getId().equals(enrollment.getCourseId())) {
-                                System.out.println(course.toString());
-                                output.append(timestamp.toString());
-                                output.append(COMMA_DELIMITER);
-                                output.append(course.toString());
-                                output.append(NEW_LINE_SEPARATOR);
-                            }
-                        }
+                        System.out.println(getCourse(enrollment.getCourseId()).toString());
+                        output.append(timestamp.toString());
+                        output.append(COMMA_DELIMITER);
+                        output.append(getCourse(enrollment.getCourseId()).toString());
+                        output.append(NEW_LINE_SEPARATOR);
                     }
                 }
             } else {
@@ -407,15 +412,11 @@ public class Main implements StudentEnrolmentManager {
             output = new BufferedWriter(new FileWriter(Log, true));
             for (StudentEnrolment enrolment : enrolments) {
                 if (enrolment.getCourseId().equals(courseID) && enrolment.getSemester().equals(semester)) {
-                    for (Student student : studentsList) {
-                        if (student.getId().equals(enrolment.getStudentId())) {
-                            System.out.println(student.toString());
-                            output.append(timestamp.toString());
-                            output.append(COMMA_DELIMITER);
-                            output.append(student.toString());
-                            output.append(NEW_LINE_SEPARATOR);
-                        }
-                    }
+                    System.out.println(getStudent(enrolment.getStudentId()).toString());
+                    output.append(timestamp.toString());
+                    output.append(COMMA_DELIMITER);
+                    output.append(getStudent(enrolment.getStudentId()).toString());
+                    output.append(NEW_LINE_SEPARATOR);
                 }
             }
             output.close();
