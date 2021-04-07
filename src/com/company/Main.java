@@ -11,16 +11,12 @@ public class Main implements StudentEnrolmentManager {
     ArrayList<StudentEnrolment> enrolments;
 
     final String enrollmentData = "enrolmentList.cvs";
-    final String studentData = "students.cvs";
-    final String courseData = "courses.cvs";
     final String Log = "Log.cvs";
 
     private static final String COMMA_DELIMITER = ",";
     private static final String NEW_LINE_SEPARATOR = "\n";
 
     private static final String ENROLLMENT_FILE_HEADER = "Course,Student,Semester";
-    private static final String STUDENT_FILE_HEADER = "Id,Name,Birthday";
-    private static final String COURSE_FILE_HEADER = "Id,Name,Number of credit";
 
     boolean checkStudentId(String id){
         boolean found = false;
