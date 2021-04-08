@@ -239,10 +239,10 @@ public class Main implements StudentEnrolmentManager {
                     continue;
                 } else {
                     String[] tokens = line.split(COMMA_DELIMITER);
-                    enrolments.add(new StudentEnrolment(tokens[0],tokens[1],tokens[2]));
+                    enrolments.add(new StudentEnrolment(tokens[0],tokens[3],tokens[6]));
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -262,7 +262,15 @@ public class Main implements StudentEnrolmentManager {
             for (StudentEnrolment enrollment : enrolments){
                 fileWriter.append(enrollment.getStudentId());
                 fileWriter.append(COMMA_DELIMITER);
+                fileWriter.append(getStudent(enrollment.getStudentId()).getName());
+                fileWriter.append(COMMA_DELIMITER);
+                fileWriter.append(getStudent(enrollment.getStudentId()).getBirthday());
+                fileWriter.append(COMMA_DELIMITER);
                 fileWriter.append(enrollment.getCourseId());
+                fileWriter.append(COMMA_DELIMITER);
+                fileWriter.append(getCourse(enrollment.getCourseId()).getName());
+                fileWriter.append(COMMA_DELIMITER);
+                fileWriter.append(String.valueOf(getCourse(enrollment.getCourseId()).getCredit()));
                 fileWriter.append(COMMA_DELIMITER);
                 fileWriter.append(enrollment.getSemester());
                 fileWriter.append(NEW_LINE_SEPARATOR);
