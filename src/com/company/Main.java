@@ -77,6 +77,7 @@ public class Main implements StudentEnrolmentManager {
         }
         return newStudent;
     }
+
     void Menu(){
         System.out.println("========== ========== ========== ========== ========== ==========");
         System.out.println("1. Enroll student\n2. Update enrollment\n3. Print all course for one student in 1 semester\n" +
@@ -90,8 +91,8 @@ public class Main implements StudentEnrolmentManager {
             e.printStackTrace();
         }
     }
-
-    public void enrollCourse(String studentId, String semester, String courseId){
+    @Override
+    public void add(String studentId, String semester, String courseId){
         for (Student stu : studentsList){
             if ( stu != null && studentId.equals(stu.getId())){
                 if (!stu.checkValidity(courseId)){
@@ -120,7 +121,39 @@ public class Main implements StudentEnrolmentManager {
                 in.nextLine();
                 switch (choice) {
                     case 1: {
-                        add();
+                        String enrollOrder;
+                        System.out.println("Please enter [year] [semester] [studentId] [courseId] ( example :2021 A s3742891 cosc123 ): ");
+                        try {
+                            Date d = new Date();
+                            enrollOrder = in.nextLine();
+                            String[] tokens = enrollOrder.split(" ");
+                            if (Integer.parseInt(tokens[0]) < d.getYear()+1900){
+                                System.out.println("You can only add course for current year.");
+                                Thread.sleep(1000);
+                                return;
+                            }
+                            if (!tokens[1].equals("A") && !tokens[1].equals("B") && !tokens[1].equals("C")){
+                                System.out.println("Semester must be A/B/C.");
+                                Thread.sleep(1000);
+                                return;
+                            }
+                            if ( checkCourseId(tokens[3]) && checkStudentId(tokens[2])){
+                                add(tokens[2],tokens[0].concat(tokens[1]), tokens[3]);
+                            } else {
+                                System.out.println("Invalid course id / student id.");
+                                return;
+                            }
+                            Thread.sleep(1000);
+                        } catch (NoSuchElementException e) {
+                            System.out.println("Invalid input");
+                            Thread.sleep(1000);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Year must be number.");
+                            Thread.sleep(1000);
+                        } catch (ArrayIndexOutOfBoundsException e){
+                            System.out.println("Incorrect input");
+                            Thread.sleep(1000);
+                        }
                         break;
                     }
                     case 2: {
@@ -292,44 +325,6 @@ public class Main implements StudentEnrolmentManager {
     }
 
     @Override
-    public void add() throws InterruptedException{
-        Scanner in = new Scanner(System.in);
-        String enrollOrder;
-        System.out.println("Please enter [year] [semester] [studentId] [courseId] ( example :2021 A s3742891 cosc123 ): ");
-        try {
-            Date d = new Date();
-            enrollOrder = in.nextLine();
-            String[] tokens = enrollOrder.split(" ");
-            if (Integer.parseInt(tokens[0]) < d.getYear()+1900){
-                System.out.println("You can only add course for current year.");
-                Thread.sleep(1000);
-                return;
-            }
-            if (!tokens[1].equals("A") && !tokens[1].equals("B") && !tokens[1].equals("C")){
-                System.out.println("Semester must be A/B/C.");
-                Thread.sleep(1000);
-                return;
-            }
-            if ( checkCourseId(tokens[3]) && checkStudentId(tokens[2])){
-                enrollCourse(tokens[2],tokens[0].concat(tokens[1]), tokens[3]);
-            } else {
-                System.out.println("Invalid course id / student id.");
-                return;
-            }
-            Thread.sleep(1000);
-        } catch (NoSuchElementException e) {
-            System.out.println("Invalid input");
-            Thread.sleep(1000);
-        } catch (NumberFormatException e) {
-            System.out.println("Year must be number.");
-            Thread.sleep(1000);
-        } catch (ArrayIndexOutOfBoundsException e){
-            System.out.println("Incorrect input");
-            Thread.sleep(1000);
-        }
-    }
-
-    @Override
     public void update(String studentID, String semester) throws InterruptedException {
         Scanner in;
         String command;
@@ -344,13 +339,9 @@ public class Main implements StudentEnrolmentManager {
             String[] tokens = command.split(" ");
             if (checkCourseId(tokens[1])) {
                 if (tokens[0].equals("add")) {
-                    enrollCourse(studentID, semester, tokens[1]);
+                    add(studentID, semester, tokens[1]);
                 } else if (tokens[0].equals("drop")) {
-                    for (StudentEnrolment enrolment : enrolments) {
-                        if (studentID.equals(enrolment.getStudentId()) && semester.equals(enrolment.getSemester()) && tokens[1].equals(enrolment.getCourseId())) {
-                            delete(enrolment);
-                        }
-                    }
+                    delete(studentID, tokens[1], semester);
                 }
             } else {
                 System.out.println("Invalid course id.");
@@ -364,10 +355,11 @@ public class Main implements StudentEnrolmentManager {
     }
 
     @Override
-    public void delete(StudentEnrolment enrolment) throws InterruptedException {
+    public void delete(String studentId, String courseId, String semester) throws InterruptedException {
+
         for (int i = 0; i < enrolments.size();i++){
             StudentEnrolment enrolment1 = enrolments.get(i);
-            if ( enrolment1.getCourseId().equals(enrolment.getCourseId()) && enrolment1.getStudentId().equals(enrolment.getStudentId())){
+            if ( enrolment1.getCourseId().equals(courseId) && enrolment1.getStudentId().equals(studentId)){
                 enrolments.remove(enrolment1);
             }
         }
@@ -459,7 +451,5 @@ public class Main implements StudentEnrolmentManager {
         }
         waitScreen();
     }
-
-
 }
 
