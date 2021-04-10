@@ -356,7 +356,16 @@ public class Main implements StudentEnrolmentManager {
 
     @Override
     public void delete(String studentId, String courseId, String semester) throws InterruptedException {
-
+        boolean found = false;
+        for ( StudentEnrolment enrollment : enrolments){
+            if (enrollment.getStudentId().equals(studentId) && enrollment.getCourseId().equals(courseId) && enrollment.getSemester().equals(semester)){
+                found = true;
+            }
+        }
+        if (found == false){
+            System.out.println("Student " + studentId +" does not enroll in course "+courseId);
+            return;
+        }
         for (int i = 0; i < enrolments.size();i++){
             StudentEnrolment enrolment1 = enrolments.get(i);
             if ( enrolment1.getCourseId().equals(courseId) && enrolment1.getStudentId().equals(studentId)){
