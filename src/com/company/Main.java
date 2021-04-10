@@ -184,7 +184,24 @@ public class Main implements StudentEnrolmentManager {
                         break;
                     }
                     case 3: {
-                        getOne();
+                        String command;
+                        System.out.print("Please enter student and semester, sepearted by space(example: s3742891 2021A): ");
+                        try {
+                            command = in.nextLine();
+                            String[] tokens = command.split(" ");
+                            if (checkStudentEnrollment(tokens[0],tokens[1])){
+                               getAllCourse(tokens[0], tokens[1]);
+                            } else {
+                                System.out.println("Student " + tokens[0] + " does not enroll in any courses in semester " + tokens[1]);
+                                Thread.sleep(2000);
+                                break;
+                            }
+                        } catch (NoSuchElementException e){
+                            break;
+                        } catch (IndexOutOfBoundsException e){
+                            System.out.println("Invalid command.");
+                            break;
+                        }
                         waitScreen();
                         break;
                     }
@@ -195,7 +212,7 @@ public class Main implements StudentEnrolmentManager {
                             command = in.nextLine();
                             String[] tokens = command.split(" ");
                             if (checkCourseEnrollment(tokens[0],tokens[1])){
-                                getOne(tokens[0], tokens[1]);
+                                getAllStudent(tokens[0], tokens[1]);
                             } else {
                                 System.out.println("Course " + tokens[0] + " does not have any student in semester " + tokens[1]);
                                 Thread.sleep(2000);
@@ -251,6 +268,7 @@ public class Main implements StudentEnrolmentManager {
             }
         }
     }
+
     public static void main(String[] args) throws InterruptedException{
         Main sys = new Main();
         sys.loadSampleData();
@@ -357,18 +375,18 @@ public class Main implements StudentEnrolmentManager {
     @Override
     public void delete(String studentId, String courseId, String semester) throws InterruptedException {
         boolean found = false;
-        for ( StudentEnrolment enrollment : enrolments){
-            if (enrollment.getStudentId().equals(studentId) && enrollment.getCourseId().equals(courseId) && enrollment.getSemester().equals(semester)){
+        for (StudentEnrolment enrollment : enrolments) {
+            if (enrollment.getStudentId().equals(studentId) && enrollment.getCourseId().equals(courseId) && enrollment.getSemester().equals(semester)) {
                 found = true;
             }
         }
-        if (found == false){
-            System.out.println("Student " + studentId +" does not enroll in course "+courseId);
+        if (found == false) {
+            System.out.println("Student " + studentId + " does not enroll in course " + courseId);
             return;
         }
-        for (int i = 0; i < enrolments.size();i++){
+        for (int i = 0; i < enrolments.size(); i++) {
             StudentEnrolment enrolment1 = enrolments.get(i);
-            if ( enrolment1.getCourseId().equals(courseId) && enrolment1.getStudentId().equals(studentId)){
+            if (enrolment1.getCourseId().equals(courseId) && enrolment1.getStudentId().equals(studentId)) {
                 enrolments.remove(enrolment1);
             }
         }
@@ -376,45 +394,29 @@ public class Main implements StudentEnrolmentManager {
     }
 
     @Override
-    public void getOne() {
-        Scanner in = new Scanner(System.in);
-        String command;
+    public void getAllCourse(String studentId, String semester) {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         BufferedWriter output = null;
-        System.out.print("Please enter student id and semester, sepearted by space(example: s3742891 2021A): ");
         try {
             output = new BufferedWriter(new FileWriter(Log, true));
-            command = in.nextLine();
-            String[] tokens = command.split(" ");
-            if (checkStudentEnrollment(tokens[0],tokens[1])){
-                for ( StudentEnrolment enrollment : enrolments){
-                    if ( enrollment.getStudentId().equals(tokens[0]) && enrollment.getSemester().equals(tokens[1])){
-                        System.out.println(getCourse(enrollment.getCourseId()).toString());
-                        output.append(timestamp.toString());
-                        output.append(COMMA_DELIMITER);
-                        output.append(getCourse(enrollment.getCourseId()).toString());
-                        output.append(NEW_LINE_SEPARATOR);
-                    }
+            for ( StudentEnrolment enrollment : enrolments){
+                if ( enrollment.getStudentId().equals(studentId) && enrollment.getSemester().equals(semester)){
+                    System.out.println(getCourse(enrollment.getCourseId()).toString());
+                    output.append(timestamp.toString());
+                    output.append(COMMA_DELIMITER);
+                    output.append(getCourse(enrollment.getCourseId()).toString());
+                    output.append(NEW_LINE_SEPARATOR);
                 }
-            } else {
-                System.out.println("Student " + tokens[0] + " does not enroll in any courses in semester " + tokens[1]);
-                Thread.sleep(1000);
-                return;
             }
             output.close();
-        } catch (NoSuchElementException | InterruptedException e ){
-            return;
-        } catch (IndexOutOfBoundsException e){
-            System.out.println("Invalid command");
-            return;
-        } catch (IOException e){
+        } catch (IOException E){
             System.out.println("File error.");
             return;
         }
     }
 
     @Override
-    public void getOne(String courseID, String semester) {
+    public void getAllStudent(String courseID, String semester) {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         BufferedWriter output = null;
         try {
