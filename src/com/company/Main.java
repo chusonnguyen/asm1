@@ -243,7 +243,6 @@ public class Main implements StudentEnrolmentManager {
                                 System.out.println("No course offered in semester" + command);
                             } else {
                                 getOne(command);
-                                Thread.sleep(1500);
                             }
                         } catch (NoSuchElementException e){
                             System.out.println("Invalid input");
@@ -406,6 +405,7 @@ public class Main implements StudentEnrolmentManager {
                 enrolments.remove(enrolment1);
             }
         }
+        System.out.println("Drop course successful");
         Thread.sleep(1000);
     }
 
@@ -455,17 +455,31 @@ public class Main implements StudentEnrolmentManager {
 
     @Override
     public void getOne(String semester){
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        BufferedWriter output = null;
         ArrayList<String> courseIdList = new ArrayList<>();
-        for ( StudentEnrolment enrollment : enrolments){
-            if ( enrollment.getSemester().equals(semester)){
-                if (courseIdList.contains(enrollment.getCourseId())){
-                    continue;
-                } else {
-                    courseIdList.add(enrollment.getCourseId());
-                    System.out.println(getCourse(enrollment.getCourseId()).toString());
+        try {
+            output = new BufferedWriter(new FileWriter("PrintCourseOffered.cvs", true));
+            for ( StudentEnrolment enrollment : enrolments){
+                if ( enrollment.getSemester().equals(semester)){
+                    if (courseIdList.contains(enrollment.getCourseId())){
+                        continue;
+                    } else {
+                        courseIdList.add(enrollment.getCourseId());
+                        System.out.println(getCourse(enrollment.getCourseId()).toString());
+                        output.append(timestamp.toString());
+                        output.append(COMMA_DELIMITER);
+                        output.append(getCourse(enrollment.getCourseId()).toString());
+                        output.append(NEW_LINE_SEPARATOR);
+                    }
                 }
             }
+            output.close();
+        } catch (IOException E){
+            System.out.println("File error.");
+            return;
         }
+        waitScreen();
     }
 
     @Override

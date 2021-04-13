@@ -1,3 +1,7 @@
 2021-04-13 13:49:51.462,Course{id='cosc124', name='bolabola', numOfCredit=12}
 2021-04-13 13:49:51.462,Course{id='cosc125', name='no_name', numOfCredit=12}
 2021-04-13 13:49:51.462,Course{id='cosc123', name='alibaba', numOfCredit=12}
+2021-04-13 20:59:02.684,Course{id='cosc124', name='course_number_2', numOfCredit=12}
+2021-04-13 20:59:02.684,Course{id='cosc125', name='course_number_3', numOfCredit=12}
+2021-04-13 20:59:02.684,Course{id='cosc123', name='course_number_1', numOfCredit=12}
+2021-04-13 21:03:10.167,Course{id='cosc123', name='course_number_1', numOfCredit=12}
