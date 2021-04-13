@@ -1,9 +1,7 @@
 package com.company;
 import java.io.*;
 import java.sql.Timestamp;
-import java.text.NumberFormat;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class Main implements StudentEnrolmentManager {
     ArrayList<Student> studentsList;
@@ -11,11 +9,15 @@ public class Main implements StudentEnrolmentManager {
     ArrayList<StudentEnrolment> enrolments;
 
     final String enrollmentData = "enrolmentList.cvs";
+    final String studentData = "Students.cvs";
+    final String courseData = "Courses.cvs";
 
     private static final String COMMA_DELIMITER = ",";
     private static final String NEW_LINE_SEPARATOR = "\n";
 
     private static final String ENROLLMENT_FILE_HEADER = "Course,Student,Semester";
+    private static final String STUDENT_FILE_HEADER = "Student ID, Name, Birthday";
+    private static final String COURSE_FILE_HEADER = "Course ID, Name, Number of credit";
 
     boolean checkStudentId(String id){
         boolean found = false;
@@ -275,21 +277,36 @@ public class Main implements StudentEnrolmentManager {
         sys.updateEnrollment(sys.enrollmentData);
     }
     public void loadSampleData(){
-        studentsList.add(new Student("s3742891", "Nguyen Chu Son", "28/09/2000"));
-        studentsList.add(new Student("s3753240", "Le Duc Nguyen", "01/01/2000"));
-        coursesList.add(new Course("cosc123", "alibaba", 12));
-        coursesList.add(new Course("cosc124", "bolabola", 12));
-        coursesList.add(new Course("cosc125", "no_name", 12));
         BufferedReader br = null;
+        BufferedReader br2 = null;
+        BufferedReader br3 = null;
         try {
-            String line;
+            String line, line1, line2;
             br = new BufferedReader(new FileReader(enrollmentData));
+            br2 = new BufferedReader(new FileReader(studentData));
+            br3 = new BufferedReader(new FileReader(courseData));
             while ((line = br.readLine()) != null) {
                 if (line.equals(ENROLLMENT_FILE_HEADER)){
                     continue;
                 } else {
                     String[] tokens = line.split(COMMA_DELIMITER);
                     enrolments.add(new StudentEnrolment(tokens[0],tokens[3],tokens[6]));
+                }
+            }
+            while ((line1 = br2.readLine()) != null) {
+                if (line1.equals(STUDENT_FILE_HEADER)){
+                    continue;
+                } else {
+                    String[] tokens1 = line1.split(COMMA_DELIMITER);
+                    studentsList.add(new Student(tokens1[0], tokens1[1], tokens1[2]));
+                }
+            }
+            while ((line2 = br3.readLine()) != null) {
+                if (line2.equals(COURSE_FILE_HEADER)){
+                    continue;
+                } else {
+                    String[] tokens2 = line2.split(COMMA_DELIMITER);
+                    coursesList.add(new Course(tokens2[0], tokens2[1], Integer.parseInt(tokens2[2])));
                 }
             }
         } catch (IOException | ArrayIndexOutOfBoundsException e) {
