@@ -11,7 +11,6 @@ public class Main implements StudentEnrolmentManager {
     ArrayList<StudentEnrolment> enrolments;
 
     final String enrollmentData = "enrolmentList.cvs";
-    final String Log = "Log.cvs";
 
     private static final String COMMA_DELIMITER = ",";
     private static final String NEW_LINE_SEPARATOR = "\n";
@@ -398,7 +397,7 @@ public class Main implements StudentEnrolmentManager {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         BufferedWriter output = null;
         try {
-            output = new BufferedWriter(new FileWriter(Log, true));
+            output = new BufferedWriter(new FileWriter("PrintCourse.cvs", true));
             for ( StudentEnrolment enrollment : enrolments){
                 if ( enrollment.getStudentId().equals(studentId) && enrollment.getSemester().equals(semester)){
                     System.out.println(getCourse(enrollment.getCourseId()).toString());
@@ -420,7 +419,7 @@ public class Main implements StudentEnrolmentManager {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         BufferedWriter output = null;
         try {
-            output = new BufferedWriter(new FileWriter(Log, true));
+            output = new BufferedWriter(new FileWriter("PrintStudent.cvs", true));
             for (StudentEnrolment enrolment : enrolments) {
                 if (enrolment.getCourseId().equals(courseID) && enrolment.getSemester().equals(semester)) {
                     System.out.println(getStudent(enrolment.getStudentId()).toString());
